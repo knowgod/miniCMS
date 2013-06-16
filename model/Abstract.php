@@ -10,14 +10,100 @@
  *
  * @author arkadij
  */
-abstract class model_Abstract
+abstract class model_Abstract extends lib_Object
 {
 
-    public function load($id, $field = NULL);
+    /**
+     * @var mysqli
+     */
+    protected static $_dbConnection;
 
-    public function save();
+    /**
+     * @var string
+     */
+    protected $_dbTable;
 
-    public function delete($id = NULL);
+    /**
+     * @var string
+     */
+    protected $_modelName;
+
+    public function __construct($modelName)
+    {
+        $this->_modelName = $modelName;
+        if (!$this->_dbTable) {
+            $this->_dbTable = "{$this->_modelName}";
+        }
+    }
+
+    public function load($id, $field = NULL)
+    {
+        static $recursionCall;
+        if ($conn = $this->_getConnection()) {
+            if (is_null($field)) {
+                $sql = "SELECT * FROM `{$this->_dbTable}` WHERE `id`=$id LIMIT 1;";
+            } else {
+                $sql = "SELECT * FROM `{$this->_dbTable}` WHERE `{$field}`=$id LIMIT 1;";
+            }
+            $result = $conn->query($sql);
+            app::log(array($sql, $result, $conn->errno, $conn->error)); //!!!!
+
+            /**
+             * Table doesn't exist - means application is not installed
+             */
+            if ('1146' == $conn->errno && !$recursionCall) {
+                $this->_createDbStructure();
+                $recursionCall = TRUE;
+                $this->load($id, $field);
+                $recursionCall = FALSE;
+            }
+            if ($recursionCall) {
+                app::log('Unable to finish installation!', app::LOG_LEVEL_ERROR);
+            }
+            if ($result instanceof mysqli_result && $result->num_rows) {
+                app::log($result); //!!!!
+            }
+        }
+        return $this;
+    }
+
+    public function save()
+    {
+        ;
+    }
+
+    public function delete($id = NULL)
+    {
+        ;
+    }
+
+    private final function _createDbStructure()
+    {
+        if ($conn = $this->_getConnection()) {
+            $installer = new lib_Install('install');
+            try {
+                $installer->install();
+            } catch (Exception $e) {
+                app::log($e->getMessage(), app::LOG_LEVEL_ERROR);
+            }
+        }
+    }
+
+    protected function _getConnection()
+    {
+        if (!self::$_dbConnection) {
+            $config = app::getConfig('db');
+            $mysqli = new mysqli($config['host'], $config['user'], $config['pass'], $config['db']);
+            if ($mysqli->connect_errno) {
+                self::$_dbConnection = FALSE;
+                app::log($mysqli->errno . ' - ' . $mysqli->error, app::LOG_LEVEL_ERROR);
+            } else {
+                self::$_dbConnection = $mysqli;
+            }
+        }
+        return self::$_dbConnection;
+    }
+
 }
 
 ?>
