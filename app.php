@@ -20,14 +20,14 @@ class app
         return dirname(__FILE__) . DIRECTORY_SEPARATOR;
     }
 
-    protected function _getConfig()
+    public static function getConfig($section = '')
     {
         if (!self::$_config) {
             include_once self::_getAppDir() . 'etc/config.php';
             self::$_config = $configuration;
-            unset($configuration);
         }
-        return self::$_config;
+        $conf = self::$_config;
+        return empty($section) ? $conf : (isset($conf[$section]) ? $conf[$section] : FALSE);
     }
 
     public static function autoload($class)
@@ -45,11 +45,12 @@ class app
      * @param string $model
      * @return model_Abstract
      */
-    public static function getModel($model)
+    public static function getModel($modelName)
     {
-        $model = ucwords(str_replace('_', ' ', $model));
-        $class = str_replace(' ', '_', $model);
-        return self::autoload('model_' . $class);
+        $model = ucwords(str_replace('_', ' ', $modelName));
+        $class = 'model_' . str_replace(' ', '_', $model);
+        self::autoload($class);
+        return new $class($modelName);
     }
 
     /**
