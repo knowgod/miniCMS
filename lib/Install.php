@@ -48,8 +48,7 @@ class lib_Install extends model_Abstract
                     app::log(array(implode(";\n", $queries) . ';', $res, $result)); //!!!!
                     $result->free();
                 }
-                $conn->more_results();
-            } while ($conn->next_result());
+            } while ($conn->more_results() && $conn->next_result());
 
             if ($conn->errno) {
                 app::log($conn->errno . ' - ' . $conn->error, app::LOG_LEVEL_ERROR);
