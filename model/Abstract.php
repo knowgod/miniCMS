@@ -73,12 +73,12 @@ abstract class model_Abstract extends lib_Object
 
     public function save()
     {
-        ;
+        return $this;
     }
 
     public function delete($id = NULL)
     {
-        ;
+        return $this;
     }
 
     private final function _createDbStructure()

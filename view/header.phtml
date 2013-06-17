@@ -1,8 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/shared/css/general.css" />
-</head>
-<body>
-    <div class="footer">HEADER</div>
-    <div class="content">
+    <head>
+        <link rel="stylesheet" type="text/css" href="/shared/css/general.css" />
+    </head>
+    <body>
+        <div class="header">
+            <div class="logo">LOGO</div>
+            <div class="login">
+                <form action="<?php echo app::getUrl(array('user' => 'login')) ?>" method="post" id="user_login">
+                    <p>
+                        <label for="user_name">name:&nbsp;</label>
+                        <input type="text" name="login[name]" id="user_name" value="<?php echo @$this->user->name ?>" />
+                    </p>
+                    <p>
+                        <label for="user_pass">pass:&nbsp;</label>
+                        <input type="password" name="login[pass]" id="user_pass" />
+                    </p>
+                    <button type="submit">login</button>
+                </form>
+            </div>
+        </div>
+
+        <!--Opening the content container below-->
+        <div class="content">

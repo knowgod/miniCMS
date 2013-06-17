@@ -31,6 +31,7 @@ class model_Page extends model_Abstract
         } else {
             app::log('Wrong template file!', app::LOG_LEVEL_ERROR);
         }
+        return $this;
     }
 
     public function render()
@@ -40,6 +41,7 @@ class model_Page extends model_Abstract
             include $this->_template;
         }
         $this->getFooter();
+        return $this;
     }
 
     public function getHeader()

@@ -17,22 +17,22 @@ class controller_Page extends controller_Abstract
         $page_id = $this->_getRequest()->getParam('page', self::PAGE_ID_HOME);
         if (self::PAGE_ID_HOME == $page_id) {
             $page = $this->getPage()->load(self::PAGE_KEY_HOME, 'key');
-            if (0 == $page->id) {
-                if ($this->getUser()->isAdmin()) {
-                    $page_id = self::PAGE_ID_CREATE;
-                } else {
-                    $this->noRouteAction();
-                }
-                return;
-            } else {
-                $page->setTemplate('content.phtml');
-            }
+        } else {
+            $page = $this->getPage()->load($page_id);
         }
+        if (0 == $page->id) {
+            $this->noRouteAction();
+            return;
+        }
+        $page->setData('user', $this->getUser());
+
         if (self::PAGE_ID_CREATE == $page_id) {
             $this->_getRequest()->setParam('page_id', $page_id);
             $this->editAction();
             return;
         }
+
+        $page->setTemplate('content.phtml');
         parent::viewAction();
     }
 

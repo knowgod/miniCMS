@@ -8,18 +8,26 @@
 class lib_Request extends lib_Object
 {
 
+    public function unsetParam($param)
+    {
+        unset($_REQUEST[$param]);
+    }
+
     public function setParam($param, $value)
     {
         $_REQUEST[$param] = $value;
         return $this;
     }
 
-    public function getParam($param = NULL, $default = NULL)
+    public function getParam($param = NULL, $default = FALSE)
     {
-        if (is_null($param) || !isset($_REQUEST[$param])) {
-            return empty($default) ? FALSE : $default;
+        if (is_null($param)) {
+            return $_REQUEST;
         }
-        return $_REQUEST[$param];
+        if (isset($_REQUEST[$param])) {
+            return $_REQUEST[$param];
+        }
+        return $default;
     }
 
     public function setStatus($code)
@@ -81,6 +89,11 @@ class lib_Request extends lib_Object
             505 => 'HTTP Version Not Supported',
             509 => 'Bandwidth Limit Exceeded'
         );
+    }
+
+    public function __toString()
+    {
+        return print_r($_REQUEST, 1);
     }
 
 }

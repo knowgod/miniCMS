@@ -8,9 +8,9 @@
 abstract class controller_Abstract
 {
 
-    private $_request;
-    private $_page;
-    private $_user;
+    protected $_request;
+    protected $_page;
+    protected $_user;
 
     /**
      *

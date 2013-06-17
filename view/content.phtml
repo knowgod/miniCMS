@@ -1,3 +1,12 @@
-<pre>
-<?php print_r($this) ?>
-</pre>
+<?php
+/* @var $this model_Page */
+?>
+
+<!--<pre>
+    <?php print_r($this) ?>
+</pre><hr />-->
+
+<h1 class="page_title"><?php echo $this->getData('title') ?></h1>
+<div class="page_content">
+    <?php echo $this->getData('content') ?>
+</div>

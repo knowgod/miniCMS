@@ -30,9 +30,18 @@ class lib_Object
         }
     }
 
-    public function setData(array $data)
+    /**
+     *
+     * @param array|string $data
+     * @param mixed $value
+     */
+    public function setData($data, $value = null)
     {
-        $this->_data = $data;
+        if (is_array($data)) {
+            $this->_data = $data;
+        } else {
+            $this->_data[$data] = $value;
+        }
     }
 
     public function getData($key = NULL)

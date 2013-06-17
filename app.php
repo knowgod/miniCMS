@@ -30,6 +30,11 @@ class app
         return dirname(__FILE__) . DS;
     }
 
+    public static function getBaseUrl()
+    {
+        return 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+    }
+
     public static function getConfig($section = '')
     {
         if (!self::$_config) {
@@ -112,14 +117,14 @@ class app
         foreach ($params as $param => $val) {
             $string[] = urlencode($param) . '=' . urlencode($val);
         }
-        return self::getBaseDir() . '?' . implode('&', $string);
+        return self::getBaseUrl() . '?' . implode('&', $string);
     }
 
     public static function run()
     {
         foreach (self::_getControllerSequence() as $name) {
             if (isset($_REQUEST[$name])) {
-                $ctrlName = "controller_" . ucwords($this->getControllerName());
+                $ctrlName = "controller_" . ucwords($name);
                 break;
             }
         }

@@ -9,12 +9,32 @@ root {
     display: block;
 }
 
+p {
+    margin: 2px;
+}
+
 .header {
+    border: 1px dotted #EDA6E2;
     width: 100%;
     text-align: center;
+    height: 70px;
+}
+
+.header .logo {
+    float: left;
+    position: relative;
+    width: 100px;
+}
+
+.header .login {
+    float: right;
+    position: relative;
+    width: 300px;
+    text-align: right;
 }
 
 .footer {
+    border: 1px dotted #EDA6E2;
     width: 100%;
     text-align: center;
 }
