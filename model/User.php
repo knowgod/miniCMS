@@ -30,11 +30,12 @@ class model_User extends model_Abstract
     public function login($name, $pass)
     {
         $this->load($name, 'name');
-        if ($this->id) {
-            $match = ($this->getPasswordHash($pass) == $this->pass);
+        $userId = FALSE;
+        if ($this->id || $this->getPasswordHash($pass) == $this->pass) {
+            $userId = $this->id;
         }
-        app::log(array($this, $match));//!!!!
-        return $this;
+        app::log(array($this, $userId)); //!!!!
+        return $userId;
     }
 
     public static function getPasswordHash($password)

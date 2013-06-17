@@ -8,9 +8,18 @@
 abstract class controller_Abstract
 {
 
+    const SESS_NAME_PREFIX_LOGGED = 'miniCMS_user_';
+    const SESS_NAME_PREFIX_NONLOG = 'miniCMS_guest_';
+
     protected $_request;
     protected $_page;
     protected $_user;
+    protected $_sessionName;
+
+    public function __construct()
+    {
+        $this->_initSession();
+    }
 
     /**
      *
@@ -56,6 +65,7 @@ abstract class controller_Abstract
     {
         if (!$this->_user) {
             $this->_user = app::getModel('user');
+            app::log($_SESSION);//!!!!
         }
         return $this->_user;
     }
@@ -74,6 +84,32 @@ abstract class controller_Abstract
     public abstract function editAction();
 
     public abstract function deleteAction();
+
+    protected function _initSession()
+    {
+        session_name($this->getSessionName());
+        session_start();
+        $_SESSION['logged_in'] = isset($_SESSION['user_id']) ? TRUE : FALSE;
+        app::log($_SESSION); //!!!!
+    }
+
+    public function getSessionName()
+    {
+        if (!$this->_sessionName) {
+            app::log($_COOKIE); //!!!!
+            foreach ($_COOKIE as $cookie => $val) {
+                if (0 === strpos($cookie, self::SESS_NAME_PREFIX_NONLOG) || 0 === strpos($cookie, self::SESS_NAME_PREFIX_LOGGED)) {
+                    $this->_sessionName = $cookie;
+                    break;
+                }
+            }
+            if (!$this->_sessionName) {
+                $this->_sessionName = self::SESS_NAME_PREFIX_NONLOG . uniqid();
+            }
+        }
+        return $this->_sessionName;
+    }
+
 }
 
 ?>
