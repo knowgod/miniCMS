@@ -9,10 +9,18 @@ define('DS', DIRECTORY_SEPARATOR);
  */
 class app
 {
+    /**
+     * Levels for logging
+     */
 
     const LOG_LEVEL_ERROR = 'ERROR';
     const LOG_LEVEL_NOTICE = 'NOTICE';
     const LOG_LEVEL_DEBUG = 'DEBUG';
+    /**
+     * Defaults
+     */
+    const DEFAULT_CONTROLLER = 'page';
+    const DEFAULT_CONTROLLER_ACTION = 'view';
 
     protected static $_aLogHandlers = array();
     protected static $_config;
@@ -98,10 +106,44 @@ class app
         return FALSE;
     }
 
+    public static function getUrl(array $params = array())
+    {
+        $string = array();
+        foreach ($params as $param => $val) {
+            $string[] = urlencode($param) . '=' . urlencode($val);
+        }
+        return self::getBaseDir() . '?' . implode('&', $string);
+    }
+
     public static function run()
     {
-        $controller = new controller_Page();
-        $controller->viewAction();
+        foreach (self::_getControllerSequence() as $name) {
+            if (isset($_REQUEST[$name])) {
+                $ctrlName = "controller_" . ucwords($this->getControllerName());
+                break;
+            }
+        }
+        if (!isset($ctrlName)) {
+            $ctrlName = "controller_" . ucwords(self::DEFAULT_CONTROLLER);
+        }
+        $controller = new $ctrlName();
+
+        $methods = get_class_methods($controller);
+        if (isset($_REQUEST[$name]) && in_array($_REQUEST[$name] . 'Action', $methods)) {
+            $action = $_REQUEST[$name] . 'Action';
+        } else {
+            $action = self::DEFAULT_CONTROLLER_ACTION . 'Action';
+        }
+
+        $controller->$action();
+    }
+
+    protected static function _getControllerSequence()
+    {
+        return array(
+            'user',
+            'page'
+        );
     }
 
 }
