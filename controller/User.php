@@ -16,11 +16,11 @@ class controller_User extends controller_Abstract
         if (FALSE !== $userId) {
             $oldSessionData = $_SESSION;
             $oldSessionName = session_name();
+            setcookie($oldSessionName, '', time() - 42000);
             session_write_close();
             session_name(self::SESS_NAME_PREFIX_LOGGED . $userId);
             session_start();
             $this->_sessionName = session_name();
-            unset($_COOKIE[$oldSessionName]);
             $_SESSION = $oldSessionData;
             $_SESSION['user_id'] = $userId;
             $_SESSION['logged_in'] = TRUE;
