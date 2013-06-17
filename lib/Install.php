@@ -13,7 +13,7 @@ class lib_Install extends model_Abstract
 
     private function _getTables()
     {
-        include_once '.' . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'install.php';
+        include_once '.' . DS . 'etc' . DS . 'install.php';
         return $table_definitions;
     }
 
@@ -27,6 +27,7 @@ class lib_Install extends model_Abstract
                 }
             }
         }
+        app::log('Installation is complete!', app::LOG_LEVEL_NOTICE);
     }
 
     private function _insertData($table, array $rows)

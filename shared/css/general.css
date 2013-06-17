@@ -1,0 +1,20 @@
+/*
+    Document   : general
+    Author     : arkadij
+    Description:
+        General style definitions
+*/
+
+root {
+    display: block;
+}
+
+.header {
+    width: 100%;
+    text-align: center;
+}
+
+.footer {
+    width: 100%;
+    text-align: center;
+}

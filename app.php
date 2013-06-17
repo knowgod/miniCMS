@@ -1,5 +1,7 @@
 <?php
 
+define('DS', DIRECTORY_SEPARATOR);
+
 /**
  * The main application class
  *
@@ -15,15 +17,15 @@ class app
     protected static $_aLogHandlers = array();
     protected static $_config;
 
-    protected static function _getAppDir()
+    public static function getBaseDir()
     {
-        return dirname(__FILE__) . DIRECTORY_SEPARATOR;
+        return dirname(__FILE__) . DS;
     }
 
     public static function getConfig($section = '')
     {
         if (!self::$_config) {
-            include_once self::_getAppDir() . 'etc/config.php';
+            include_once self::getBaseDir() . 'etc/config.php';
             self::$_config = $configuration;
         }
         $conf = self::$_config;
@@ -32,7 +34,7 @@ class app
 
     public static function autoload($class)
     {
-        $filename = self::_getAppDir() . str_replace('_', '/', $class) . '.php';
+        $filename = self::getBaseDir() . str_replace('_', '/', $class) . '.php';
         if (file_exists($filename)) {
             include_once $filename;
             return TRUE;
@@ -45,11 +47,14 @@ class app
      * @param string $model
      * @return model_Abstract
      */
-    public static function getModel($modelName)
+    public static function getModel($modelName, $param = NULL)
     {
         $model = ucwords(str_replace('_', ' ', $modelName));
         $class = 'model_' . str_replace(' ', '_', $model);
         self::autoload($class);
+        if (!is_null($param)) {
+            return new $class($modelName, $param);
+        }
         return new $class($modelName);
     }
 
@@ -72,13 +77,13 @@ class app
             $before = "{$stack[0]['line']}. {$stack[1]['class']}::{$stack[1]['function']} :\n";
 
             $info = date('Y-m-d H:i:s') . ' :: ' . $level . ' :: ';
-            $str = $info . $before . print_r($data, 1);
+            $str = $info . $before . print_r($data, 1) . "\n";
 
             if ($file) {
                 if (isset(self::$_aLogHandlers[$file])) {
                     $handler = self::$_aLogHandlers[$file];
                 } else {
-                    $filename = self::_getAppDir() . $file;
+                    $filename = self::getBaseDir() . $file;
                     $handler = fopen($filename, 'a');
                     if ($handler) {
                         self::$_aLogHandlers[$file] = $handler;
@@ -91,6 +96,12 @@ class app
             return $str;
         }
         return FALSE;
+    }
+
+    public static function run()
+    {
+        $controller = new controller_Page();
+        $controller->viewAction();
     }
 
 }

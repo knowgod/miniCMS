@@ -8,6 +8,6 @@ define('LOG_ON', 1);
  */
 error_reporting(E_ALL | E_STRICT);
 
-$model = app::getModel('page')->load(1);
+app::run();
 
 ?>

@@ -38,12 +38,12 @@ abstract class model_Abstract extends lib_Object
 
     public function load($id, $field = NULL)
     {
-        static $recursionCall;
+        static $recursiveCall;
         if ($conn = $this->_getConnection()) {
             if (is_null($field)) {
                 $sql = "SELECT * FROM `{$this->_dbTable}` WHERE `id`=$id LIMIT 1;";
             } else {
-                $sql = "SELECT * FROM `{$this->_dbTable}` WHERE `{$field}`=$id LIMIT 1;";
+                $sql = "SELECT * FROM `{$this->_dbTable}` WHERE `{$field}`='$id' LIMIT 1;";
             }
             $result = $conn->query($sql);
             app::log(array($sql, $result, $conn->errno, $conn->error)); //!!!!
@@ -51,19 +51,23 @@ abstract class model_Abstract extends lib_Object
             /**
              * Table doesn't exist - means application is not installed
              */
-            if ('1146' == $conn->errno && !$recursionCall) {
+            if ('1146' == $conn->errno) {
+                if ($recursiveCall) {
+                    app::log('Unable to finish installation!', app::LOG_LEVEL_ERROR);
+                    return $this;
+                }
                 $this->_createDbStructure();
-                $recursionCall = TRUE;
+                $recursiveCall = TRUE;
                 $this->load($id, $field);
-                $recursionCall = FALSE;
-            }
-            if ($recursionCall) {
-                app::log('Unable to finish installation!', app::LOG_LEVEL_ERROR);
+                $recursiveCall = FALSE;
             }
             if ($result instanceof mysqli_result && $result->num_rows) {
-                app::log($result); //!!!!
+                $this->addData($result->fetch_assoc());
+            } else {
+                $this->id = 0;
             }
         }
+        app::log($this->_data); //!!!!
         return $this;
     }
 
