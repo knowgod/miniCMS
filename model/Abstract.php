@@ -36,6 +36,18 @@ abstract class model_Abstract extends lib_Object
         }
     }
 
+    /**
+     * Load model data from DB table.
+     *
+     * Can load by ID - primary field
+     * or by any custom field.
+     * Anyway you will get only the 1st row.
+     *
+     * @staticvar bool $recursiveCall Flag describes if we have executed installer and call this recursively.
+     * @param mixed $id Object ID or value of custom field
+     * @param string $field Custom field name
+     * @return model_Abstract
+     */
     public function load($id, $field = NULL)
     {
         static $recursiveCall;
@@ -71,16 +83,58 @@ abstract class model_Abstract extends lib_Object
         return $this;
     }
 
+    /**
+     * Returns collection of objects.
+     *
+     * @param string $orderByField Order collection by custom field
+     * @return array Collection
+     */
+    protected function _getCollection($orderByField = 'id')
+    {
+        if ($conn = $this->_getConnection()) {
+            $sql = "SELECT * FROM `{$this->_dbTable}` ORDER BY `{$orderByField}`;";
+            $result = $conn->query($sql);
+            app::log(array($sql, $result, $conn->errno, $conn->error)); //!!!!
+            $collection = array();
+            if ($result instanceof mysqli_result && $result->num_rows) {
+                while ($row = $result->fetch_assoc()) {
+                    $model = app::getModel($this->_modelName);
+                    $model->setData($row);
+                    $collection[$row['id']] = $model;
+                }
+            }
+
+            return $collection;
+        }
+    }
+
+    /**
+     * Save current model info into DB table
+     *
+     * @return model_Abstract
+     */
     public function save()
     {
         return $this;
     }
 
+    /**
+     * Delete selected object from DB table
+     *
+     * @param int $id If not set - delete current model object
+     * @return bool
+     */
     public function delete($id = NULL)
     {
-        return $this;
+        return FALSE;
     }
 
+    /**
+     * Install table structure and data into DB
+     *
+     * Run if considered that installation is not complete.
+     * Usually executed at first application run.
+     */
     private final function _createDbStructure()
     {
         if ($conn = $this->_getConnection()) {
@@ -93,6 +147,11 @@ abstract class model_Abstract extends lib_Object
         }
     }
 
+    /**
+     * Create DB connection using details from configuration
+     *
+     * @return mysqli
+     */
     protected function _getConnection()
     {
         if (!self::$_dbConnection) {
