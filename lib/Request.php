@@ -30,6 +30,11 @@ class lib_Request extends lib_Object
         return $default;
     }
 
+    public function getData($key = NULL)
+    {
+        return $this->getParam($key);
+    }
+
     public function setStatus($code)
     {
         $codes = $this->_getStatusesArray();

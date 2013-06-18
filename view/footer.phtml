@@ -1,6 +1,19 @@
 
-    <!--Closing the content container below-->
-    </div>
-    <div class="footer">FOOTER</div>
+<!--Closing the content container below-->
+</div>
+<textarea id="content-editor" name="content"></textarea>
+
+<div class="footer">
+    <ul class="footer-links">
+        <?php if ($this->userCanEdit()) : ?>
+            <li><a id="link-edit" href="#" onclick="editPageEnable();return false;">Edit current page</a></li>
+            <li><button type="submit" id="link-save">Save current page</button></li>
+            <li><a href="<?php echo app::getUrl(array('page' => 'delete')) ?>">Delete current page</a></li>
+            <li><a href="<?php echo app::getUrl(array('page' => 'new', 'parent' => $this->id)) ?>">Create new sub-page</a></li>
+        <?php endif; ?>
+        <li><a href="https://github.com/knowgod/miniCMS" target="_blank">Project page</a></li>
+    </ul>
+</div>
+</form>
 </body>
 </html>

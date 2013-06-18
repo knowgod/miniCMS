@@ -33,7 +33,7 @@ class controller_Page extends controller_Abstract
 
     public function saveAction()
     {
-
+        app::log($this->_getRequest()->getData());
     }
 
     public function deleteAction()
