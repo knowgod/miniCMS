@@ -12,7 +12,7 @@ class model_Page extends model_Abstract
 
     /**
      * Construct model.
-     * 
+     *
      * Can set template on construction
      *
      * @param string $modelName
@@ -95,12 +95,10 @@ class model_Page extends model_Abstract
     public function getMenuItems()
     {
         $collection = $this->_getCollection('path');
-        app::log($collection); //!!!!
         $menuItems = array();
         foreach ($collection as $id => $item) {
             $this->_setTreeNode($menuItems, $item);
         }
-        app::log($menuItems); //!!!!
         return $menuItems;
     }
 
@@ -117,13 +115,16 @@ class model_Page extends model_Abstract
         }
     }
 
-    public function renderMenu($items, $elemContainer = 'ul', $elemNode = 'li', $elemTitle = 'span', $level = 0)
+    public function renderMenu($items, $elemContainer = 'ul', $elemNode = 'li', $elemTitle = 'a', $level = 0)
     {
-        $output = "<{$elemContainer}>";
+        $id = (0 == $level) ? ' id="cssmenu"' : '';
+        $output = "<{$elemContainer}{$id}>";
         foreach ($items as $item) {
-            $output .= "<{$elemNode} class=\"level-{$level}\">";
+            $output .= "<{$elemNode}>";
             if (isset($item['item'])) {
-                $output .= "<{$elemTitle} class=\"level-{$level}\"  >" . $item['item']->title . "</{$elemTitle}>";
+                $active = ($item['item']->id = $this->id) ? ' class="active"' : '';
+                $link = app::getUrl(array('page' => 'view', 'id' => $item['item']->id));
+                $output .= "<{$elemTitle} href=\"{$link}\" {$active}>" . $item['item']->title . "</{$elemTitle}>";
             }
             if (isset($item['children'])) {
                 $output .= $this->renderMenu($item['children'], $elemContainer, $elemNode, $elemTitle, ++$level);
