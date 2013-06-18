@@ -51,7 +51,7 @@ class controller_Page extends controller_Abstract
             'key' => model_Page::prepareKey($title),
         ));
         $model->save();
-        $path = explode('/', $this->_getRequest()->getParam('path', ''));
+        $path = explode('/', urldecode($this->_getRequest()->getParam('path', '')));
         $path[] = $model->id;
         $model->setData('path', implode('/', $path))->save();
         $this->_getRequest()->setParam('id', $model->id);
