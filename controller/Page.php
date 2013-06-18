@@ -60,7 +60,19 @@ class controller_Page extends controller_Abstract
 
     public function deleteAction()
     {
-
+        if ($id = $this->_getRequest()->getParam('id', FALSE)) {
+            $model = app::getModel('page');
+            $model->id = $id;
+            try {
+                $model->delete();
+                app::log("Successfully delete page ID=$id", app::LOG_LEVEL_NOTICE);
+            } catch (Exception $e) {
+                app::log("Cannot delete page ID=$id", app::LOG_LEVEL_ERROR);
+            }
+            $this->_getRequest()->unsetParam('id');
+        }
+        $this->viewAction();
+        return;
     }
 
 }

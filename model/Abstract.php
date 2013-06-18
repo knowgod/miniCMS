@@ -148,6 +148,14 @@ abstract class model_Abstract extends lib_Object
      */
     public function delete($id = NULL)
     {
+        if (is_null($id)) {
+            $id = $this->id;
+        }
+        if ($id && $conn = $this->_getConnection()) {
+            $sql = "DELETE FROM `{$this->_dbTable}` WHERE `id`={$id};";
+            $result = $conn->query($sql);
+            app::log(array($sql, $result, $conn->errno, $conn->error)); //!!!!
+        }
         return FALSE;
     }
 
