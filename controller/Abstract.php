@@ -83,7 +83,7 @@ abstract class controller_Abstract
         $this->getPage()->render();
     }
 
-    public abstract function editAction();
+    public abstract function saveAction();
 
     public abstract function deleteAction();
 

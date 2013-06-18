@@ -30,17 +30,17 @@ class controller_User extends controller_Abstract
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
 
-    public function viewAction()
-    {
-        parent::viewAction();
-        app::log($this->_user); //!!!!
-    }
-
-    public function editAction()
+    /**
+     * Not yet implemented
+     */
+    public function saveAction()
     {
 
     }
 
+    /**
+     * Not yet implemented
+     */
     public function deleteAction()
     {
 
