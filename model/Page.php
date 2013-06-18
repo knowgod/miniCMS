@@ -115,19 +115,19 @@ class model_Page extends model_Abstract
         }
     }
 
-    public function renderMenu($items, $elemContainer = 'ul', $elemNode = 'li', $elemTitle = 'a', $level = 0)
+    public function renderMenu($items, $elemContainer = 'ul', $elemNode = 'li', $level = 0)
     {
-        $id = (0 == $level) ? ' id="cssmenu"' : '';
-        $output = "<{$elemContainer}{$id}>";
-        foreach ($items as $item) {
+        $rootId = (0 == $level) ? ' id="cssmenu"' : '';
+        $output = "<{$elemContainer}{$rootId}>";
+        foreach ($items as $itemId => $_item) {
             $output .= "<{$elemNode}>";
-            if (isset($item['item'])) {
-                $active = ($item['item']->id = $this->id) ? ' class="active"' : '';
-                $link = app::getUrl(array('page' => 'view', 'id' => $item['item']->id));
-                $output .= "<{$elemTitle} href=\"{$link}\" {$active}>" . $item['item']->title . "</{$elemTitle}>";
+            if (isset($_item['item'])) {
+                $active = ($itemId = $this->id) ? ' class="active"' : '';
+                $link = app::getUrl(array('page' => 'view', 'id' => $itemId));
+                $output .= "<a href=\"{$link}\" {$active}>" . $_item['item']->title . "</a>";
             }
-            if (isset($item['children'])) {
-                $output .= $this->renderMenu($item['children'], $elemContainer, $elemNode, $elemTitle, ++$level);
+            if (isset($_item['children'])) {
+                $output .= $this->renderMenu($_item['children'], $elemContainer, $elemNode, ++$level);
             }
             $output .= "</{$elemNode}>";
         }
