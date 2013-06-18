@@ -14,9 +14,10 @@ class controller_Page extends controller_Abstract
 
     public function viewAction()
     {
-        $page_id = $this->_getRequest()->getParam('page', self::PAGE_ID_HOME);
+        $page_id = $this->_getRequest()->getParam('id', self::PAGE_ID_HOME);
         if (self::PAGE_ID_HOME == $page_id) {
-            $page = $this->getPage()->load(self::PAGE_KEY_HOME, 'key');
+            $page_key = $this->_getRequest()->getParam('key', self::PAGE_KEY_HOME);
+            $page = $this->getPage()->load($page_key, 'key');
         } else {
             $page = $this->getPage()->load($page_id);
         }
@@ -26,17 +27,11 @@ class controller_Page extends controller_Abstract
         }
         $page->setData('user', $this->getUser());
 
-        if (self::PAGE_ID_CREATE == $page_id) {
-            $this->_getRequest()->setParam('page_id', $page_id);
-            $this->editAction();
-            return;
-        }
-
         $page->setTemplate('content.phtml');
         parent::viewAction();
     }
 
-    public function editAction()
+    public function saveAction()
     {
 
     }

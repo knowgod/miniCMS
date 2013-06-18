@@ -151,7 +151,7 @@ class model_Page extends model_Abstract
                 $output .= "<{$elemNode}>";
                 if (isset($_item['item'])) {
                     $active = ($itemId = $this->id) ? ' class="active"' : '';
-                    $link = app::getUrl(array('page' => 'view', 'id' => $itemId));
+                    $link = app::getUrl(array('page' => 'view', 'key' => $_item['item']->key));
                     $output .= "<a href=\"{$link}\" {$active}>" . $_item['item']->title . "</a>";
                 }
                 if (isset($_item['children'])) {
