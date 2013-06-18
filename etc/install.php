@@ -7,10 +7,13 @@ $table_definitions = array(
             'id' => 'int(10) unsigned NOT NULL auto_increment',
             'level' => 'VARCHAR(32) NOT NULL',
         ),
+        /**
+         * These data are restricted - never delete
+         */
         'data' => array(
-            array(1, 'guest'),
-            array(2, 'user'),
-            array(3, 'admin'),
+            array(model_User::LEVEL_GUEST, model_User::LEVEL_GUEST_TEXT),
+            array(model_User::LEVEL_USER, model_User::LEVEL_USER_TEXT),
+            array(model_User::LEVEL_ADMIN, model_User::LEVEL_ADMIN_TEXT),
         ),
     ),
     'page' => array(

@@ -37,13 +37,19 @@ class model_Page extends model_Abstract
     }
 
     /**
-     * Preapare the template file
+     * Prepare the template file
+     *
+     * All templates are stored in folder ROOT/view
      *
      * @param string $template
      * @return model_Page
      */
     public function setTemplate($template)
     {
+        if (!$this->userCanView()) {
+            $template = 'restricted.phtml';
+        }
+
         $path = app::getBaseDir() . 'view' . DS . $template;
         if (file_exists($path)) {
             $this->_template = $path;
@@ -66,6 +72,27 @@ class model_Page extends model_Abstract
         }
         $this->getFooter();
         return $this;
+    }
+
+    public function userCanView($userId = NULL)
+    {
+        if (is_null($userId)) {
+            $userLevel = $this->user->user_level;
+        } else {
+            $userLevel = app::getModel('user')->load($userId)->user_level;
+        }
+        if (!$userLevel) {
+            $userLevel = model_User::LEVEL_GUEST;
+        }
+        return ($this->user_level <= $userLevel);
+    }
+
+    public function userCanEdit($userId = NULL)
+    {
+        if (is_null($userId)) {
+            $userId = $this->user->user_level;
+        }
+        return ($userId >= model_User::LEVEL_ADMIN);
     }
 
     /**
@@ -120,16 +147,18 @@ class model_Page extends model_Abstract
         $rootId = (0 == $level) ? ' id="cssmenu"' : '';
         $output = "<{$elemContainer}{$rootId}>";
         foreach ($items as $itemId => $_item) {
-            $output .= "<{$elemNode}>";
-            if (isset($_item['item'])) {
-                $active = ($itemId = $this->id) ? ' class="active"' : '';
-                $link = app::getUrl(array('page' => 'view', 'id' => $itemId));
-                $output .= "<a href=\"{$link}\" {$active}>" . $_item['item']->title . "</a>";
+            if ($_item['item']->userCanView($this->user->id)) {
+                $output .= "<{$elemNode}>";
+                if (isset($_item['item'])) {
+                    $active = ($itemId = $this->id) ? ' class="active"' : '';
+                    $link = app::getUrl(array('page' => 'view', 'id' => $itemId));
+                    $output .= "<a href=\"{$link}\" {$active}>" . $_item['item']->title . "</a>";
+                }
+                if (isset($_item['children'])) {
+                    $output .= $this->renderMenu($_item['children'], $elemContainer, $elemNode, ++$level);
+                }
+                $output .= "</{$elemNode}>";
             }
-            if (isset($_item['children'])) {
-                $output .= $this->renderMenu($_item['children'], $elemContainer, $elemNode, ++$level);
-            }
-            $output .= "</{$elemNode}>";
         }
         $output .= "</{$elemContainer}>";
         return $output;

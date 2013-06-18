@@ -58,7 +58,7 @@ abstract class model_Abstract extends lib_Object
                 $sql = "SELECT * FROM `{$this->_dbTable}` WHERE `{$field}`='$id' LIMIT 1;";
             }
             $result = $conn->query($sql);
-            app::log(array($sql, $result, $conn->errno, $conn->error)); //!!!!
+//            app::log(array($sql, $result, $conn->errno, $conn->error)); //!!!!
 
             /**
              * Table doesn't exist - means application is not installed
@@ -79,7 +79,7 @@ abstract class model_Abstract extends lib_Object
                 $this->id = 0;
             }
         }
-        app::log($this->_data); //!!!!
+//        app::log($this->_data); //!!!!
         return $this;
     }
 
@@ -94,7 +94,6 @@ abstract class model_Abstract extends lib_Object
         if ($conn = $this->_getConnection()) {
             $sql = "SELECT * FROM `{$this->_dbTable}` ORDER BY `{$orderByField}`;";
             $result = $conn->query($sql);
-            app::log(array($sql, $result, $conn->errno, $conn->error)); //!!!!
             $collection = array();
             if ($result instanceof mysqli_result && $result->num_rows) {
                 while ($row = $result->fetch_assoc()) {

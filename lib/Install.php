@@ -46,7 +46,6 @@ class lib_Install extends model_Abstract
 
             do {
                 if ($result = $conn->store_result()) {
-                    app::log(array(implode(";\n", $queries) . ';', $res, $result)); //!!!!
                     $result->free();
                 }
             } while ($conn->more_results() && $conn->next_result());
@@ -74,7 +73,6 @@ class lib_Install extends model_Abstract
             $sql = "CREATE TABLE IF NOT EXISTS `{$table}` (" . implode(', ', $details) . ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $res = $conn->query($sql);
             $conn->store_result();
-            app::log(array($sql, $res)); //!!!!
             if (TRUE !== $res) {
                 app::log($conn->errno . ' - ' . $conn->error, app::LOG_LEVEL_ERROR);
                 throw new Exception("Error creating table `{$table}`.");
