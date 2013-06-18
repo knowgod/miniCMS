@@ -114,6 +114,24 @@ abstract class model_Abstract extends lib_Object
      */
     public function save()
     {
+        if ($conn = $this->_getConnection()) {
+            if ($this->id) {
+                $fields = array();
+                foreach ($this->_data as $_field => $_value) {
+                    $fields[] = "`{$_field}`='{$_value}'";
+                }
+                $sql = "UPDATE `{$this->_dbTable}` SET " . implode(",", $fields) . " WHERE `id`={$this->id};";
+            } else {
+                $sql = "INSERT INTO `{$this->_dbTable}` (`" . implode('`,`', array_keys($this->_data)) . "`)
+                    VALUES('" . implode("','", $this->_data) . "');";
+            }
+            $result = $conn->query($sql);
+            app::log(array($sql, $result, $conn->errno, $conn->error)); //!!!!
+            if ($conn->errno) {
+                app::log('Error saving model "' . $this->_modelName . '" into DB with ID=' . $this->id, app::LOG_LEVEL_ERROR . "\n{$conn->errno} - {$conn->error}");
+            }
+        }
+        app::log($this->_data); //!!!!
         return $this;
     }
 

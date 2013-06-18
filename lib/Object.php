@@ -26,7 +26,7 @@ class lib_Object
     public function addData(array $data)
     {
         foreach ($data as $key => $val) {
-            $this->_data[$key] = $val;
+            $this->_data[$key] = trim($val);
         }
         return $this;
     }
@@ -41,7 +41,7 @@ class lib_Object
         if (is_array($data)) {
             $this->_data = $data;
         } else {
-            $this->_data[$data] = $value;
+            $this->_data[$data] = trim($value);
         }
         return $this;
     }
