@@ -21,4 +21,13 @@ $(function() {
         oContent.fadeIn();
         $('#link-edit').fadeIn();
     };
+
+    window.newPageCreate = function(link) {
+        var title = prompt('Enter new page title', 'New Page');
+        if (title) {
+            link.href += '&title=' + encodeURI(title);
+            return true;
+        }
+        return false;
+    };
 });

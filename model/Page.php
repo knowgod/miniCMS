@@ -37,6 +37,12 @@ class model_Page extends model_Abstract
         return parent::save();
     }
 
+    public static function prepareKey($origin)
+    {
+        $key = urlencode(strtolower(preg_replace('#[^\w\d]#', '_', $origin))) . uniqid();
+        return $key;
+    }
+
     /**
      * Decode HTML after loading
      *

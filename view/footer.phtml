@@ -37,7 +37,7 @@
         <?php if ($this->userCanEdit()) : ?>
             <li id="link-edit"><a href="#" onclick="editPageEnable();return false;">Edit current page</a></li>
             <li><a href="<?php echo app::getUrl(array('page' => 'delete')) ?>">Delete current page</a></li>
-            <li><a href="<?php echo app::getUrl(array('page' => 'new', 'parent' => $this->id)) ?>">Create new sub-page</a></li>
+            <li><a href="<?php echo app::getUrl(array('page' => 'new', 'path' => urlencode($this->path))) ?>" onclick="return newPageCreate(this)">Create new sub-page</a></li>
         <?php endif; ?>
         <li><a href="https://github.com/knowgod/miniCMS" target="_blank">Project page</a></li>
     </ul>

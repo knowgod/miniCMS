@@ -41,7 +41,7 @@ class lib_Object
         if (is_array($data)) {
             $this->_data = $data;
         } else {
-            $this->_data[$data] = trim($value);
+            $this->_data[$data] = (is_object($value) || is_array($value)) ? $value : trim($value);
         }
         return $this;
     }
