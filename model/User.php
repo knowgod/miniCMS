@@ -51,6 +51,11 @@ class model_User extends model_Abstract
         return md5($password . $password);
     }
 
+    public function isLoggedIn()
+    {
+        return $this->id ? TRUE : FALSE;
+    }
+
 }
 
 ?>

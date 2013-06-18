@@ -1,25 +1,37 @@
+<?php
+/* @var $this model_Page */
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
         <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/shared/css/general.css" />
         <script src="/shared/js/menu.js"></script>
+        <?php if ($this->userCanEdit()) : ?>
+            <script src="/shared/js/admin.js"></script>
+        <?php endif; ?>
     </head>
     <body>
         <div class="header">
             <div class="logo">LOGO</div>
             <div class="login">
-                <form action="<?php echo app::getUrl(array('user' => 'login')) ?>" method="post" id="user_login">
-                    <p>
-                        <label for="user_name">name:&nbsp;</label>
-                        <input type="text" name="login[name]" id="user_name" value="<?php echo @$this->user->name ?>" />
-                    </p>
-                    <p>
-                        <label for="user_pass">pass:&nbsp;</label>
-                        <input type="password" name="login[pass]" id="user_pass" />
-                    </p>
-                    <button type="submit">login</button>
-                </form>
+                <?php if ($this->user->isLoggedIn()) : ?>
+                    <p>Welcome <?php echo $this->user->name ?>!</p>
+                    <a href="<?php echo app::getUrl(array('user' => 'logout')) ?>">Logout</a>
+                <?php else : ?>
+                    <form action="<?php echo app::getUrl(array('user' => 'login')) ?>" method="post" id="user_login">
+                        <p>
+                            <label for="user_name">name:&nbsp;</label>
+                            <input type="text" name="login[name]" id="user_name" value="<?php echo @$this->user->name ?>" />
+                        </p>
+                        <p>
+                            <label for="user_pass">pass:&nbsp;</label>
+                            <input type="password" name="login[pass]" id="user_pass" />
+                        </p>
+                        <button type="submit">Login</button>
+                    </form>
+                <?php endif; ?>
             </div>
             <div class="topMenu">
                 <?php echo $this->renderMenu($this->getMenuItems(), 'ul', 'li') ?>

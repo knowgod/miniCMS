@@ -98,7 +98,6 @@ abstract class controller_Abstract
     public function getSessionName()
     {
         if (!$this->_sessionName) {
-            app::log($_COOKIE); //!!!!
             foreach ($_COOKIE as $cookie => $val) {
                 if (0 === strpos($cookie, self::SESS_NAME_PREFIX_NONLOG) || 0 === strpos($cookie, self::SESS_NAME_PREFIX_LOGGED)) {
                     $this->_sessionName = $cookie;
