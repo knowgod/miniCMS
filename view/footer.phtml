@@ -1,19 +1,46 @@
 
-<!--Closing the content container below-->
 </div>
-<textarea id="content-editor" name="content"></textarea>
+<!--Closing the content container above-->
+
+<?php if ($this->userCanEdit()) : ?>
+    <div id="page-editor">
+        <form method="post" action="<?php echo app::getUrl(array('page' => 'save')) ?>" id="page_edit">
+            <input type="hidden" name="edit_page[id]" value="<?php echo $this->id ?>" />
+            <input type="hidden" name="edit_page[path]" value="<?php echo $this->path ?>" />
+            <p>
+                <label for="page_title">Page title&nbsp</label>
+                <input type="text" id="edit_page_title" name="edit_page[title]" value="<?php echo $this->title ?>" />
+            </p>
+            <p>
+                <!--@todo Attach any WYSIWYG editor here-->
+                <textarea id="edit_page_content" name="edit_page[content]"></textarea>
+            </p>
+            <p>
+                <label for="page_title">User Level&nbsp</label>
+                <select id="edit_page_user_level" name="edit_page[user_level]">
+                    <?php foreach (model_User::getUserLevels() as $code => $title) : ?>
+                        <option value="<?php echo $code ?>"><?php echo $title ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </p>
+            <p>
+                <button type="button" onclick="editPageCancel()">Cancel edit</button>
+                <button type="reset">Reset changes</button>
+                <button type="submit">Save current page</button>
+            </p>
+        </form>
+    </div>
+<?php endif; ?>
 
 <div class="footer">
     <ul class="footer-links">
         <?php if ($this->userCanEdit()) : ?>
-            <li><a id="link-edit" href="#" onclick="editPageEnable();return false;">Edit current page</a></li>
-            <li><button type="submit" id="link-save">Save current page</button></li>
+            <li id="link-edit"><a href="#" onclick="editPageEnable();return false;">Edit current page</a></li>
             <li><a href="<?php echo app::getUrl(array('page' => 'delete')) ?>">Delete current page</a></li>
             <li><a href="<?php echo app::getUrl(array('page' => 'new', 'parent' => $this->id)) ?>">Create new sub-page</a></li>
         <?php endif; ?>
         <li><a href="https://github.com/knowgod/miniCMS" target="_blank">Project page</a></li>
     </ul>
 </div>
-</form>
 </body>
 </html>

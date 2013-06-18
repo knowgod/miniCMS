@@ -34,6 +34,14 @@ class controller_Page extends controller_Abstract
     public function saveAction()
     {
         app::log($this->_getRequest()->getData());
+        $data = $this->_getRequest()->getParam('edit_page');
+        $model = $this->getPage()->load($data['id']);
+        if ($model->id) {
+            $model->addData($data)->save();
+        }
+        app::log($model);
+
+        $this->_redirectBack();
     }
 
     public function deleteAction()

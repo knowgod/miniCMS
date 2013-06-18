@@ -50,6 +50,14 @@ class model_User extends model_Abstract
     {
         return md5($password . $password);
     }
+    public static function getUserLevels()
+    {
+        return array(
+            model_User::LEVEL_GUEST => model_User::LEVEL_GUEST_TEXT,
+            model_User::LEVEL_USER => model_User::LEVEL_USER_TEXT,
+            model_User::LEVEL_ADMIN => model_User::LEVEL_ADMIN_TEXT,
+        );
+    }
 
     public function isLoggedIn()
     {

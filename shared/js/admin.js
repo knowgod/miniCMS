@@ -4,14 +4,21 @@
 $(function() {
     window.editPageEnable = function() {
         var oContent = $('#content');
-        var oContentEditor = $('#content-editor');
-        oContentEditor.text(oContent.html());
+        var oContentEditor = $('#edit_page_content');
 
-        oContentEditor.fadeIn();
-        oContentEditor.height(oContent.height() * 1.2);
+        oContentEditor.text($('.page_content').html());
+
+        $('#page-editor').fadeIn()
+        oContentEditor.height(oContent.height());
         oContent.fadeOut();
 
         $('#link-edit').fadeOut();
-        $('#link-save').fadeIn();
+    };
+
+    window.editPageCancel = function() {
+        var oContent = $('#content');
+        $('#page-editor').fadeOut()
+        oContent.fadeIn();
+        $('#link-edit').fadeIn();
     };
 });

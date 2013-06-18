@@ -47,10 +47,18 @@ p {
     display: none;
 }
 
-#content-editor {
+#page-editor {
     display: none;
+}
+#page-editor textarea {
     width: 1000px;
-    height: auto;
+}
+#page-editor label {
+    width: 200px;
+}
+#page-editor input,
+#page-editor select {
+    width: 600px;
 }
 
 
