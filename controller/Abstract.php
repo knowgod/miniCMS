@@ -65,7 +65,9 @@ abstract class controller_Abstract
     {
         if (!$this->_user) {
             $this->_user = app::getModel('user');
-            app::log($_SESSION);//!!!!
+            if (isset($_SESSION['user_id'])) {
+                $this->_user->load($_SESSION['user_id']);
+            }
         }
         return $this->_user;
     }
