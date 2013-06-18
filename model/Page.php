@@ -27,6 +27,31 @@ class model_Page extends model_Abstract
     }
 
     /**
+     * Encode HTML before saving
+     *
+     * @return model_Page
+     */
+    public function save()
+    {
+        $this->content = htmlspecialchars($this->content);
+        return parent::save();
+    }
+
+    /**
+     * Decode HTML after loading
+     *
+     * @param mixed $id
+     * @param string $field
+     * @return model_Page
+     */
+    public function load($id, $field = NULL)
+    {
+        parent::load($id, $field);
+        $this->content = htmlspecialchars_decode($this->content);
+        return $this;
+    }
+
+    /**
      * Get the name of template
      *
      * @return string
