@@ -12,7 +12,7 @@ class controller_User extends controller_Abstract
     {
         setcookie(session_name(), '', time() - 42000);
         session_write_close();
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        $this->_redirectBack();
     }
 
     public function loginAction()
@@ -25,7 +25,7 @@ class controller_User extends controller_Abstract
         }
         $this->_getRequest()->unsetParam('login');
         app::log(array($_SESSION, $_SERVER['HTTP_REFERER'], $this->_sessionName, $_COOKIE)); //!!!!
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        $this->_redirectBack();
     }
 
     protected function _switchSessionToUser($userId)

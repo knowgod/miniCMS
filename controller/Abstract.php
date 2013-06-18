@@ -44,6 +44,12 @@ abstract class controller_Abstract
         }
     }
 
+    protected function _redirectBack()
+    {
+        $location = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : app::getBaseUrl();
+        header('Location: ' . $location);
+    }
+
     /**
      *
      * @param string $template
