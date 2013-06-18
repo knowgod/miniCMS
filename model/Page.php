@@ -74,12 +74,16 @@ class model_Page extends model_Abstract
         return $this;
     }
 
-    public function userCanView($userId = NULL)
+    /**
+     * Check if the page is available for given user level
+     *
+     * @param int $userLevel If not set - choose current user level
+     * @return bool
+     */
+    public function userCanView($userLevel = NULL)
     {
-        if (is_null($userId)) {
+        if (is_null($userLevel)) {
             $userLevel = $this->user->user_level;
-        } else {
-            $userLevel = app::getModel('user')->load($userId)->user_level;
         }
         if (!$userLevel) {
             $userLevel = model_User::LEVEL_GUEST;
@@ -87,12 +91,18 @@ class model_Page extends model_Abstract
         return ($this->user_level <= $userLevel);
     }
 
-    public function userCanEdit($userId = NULL)
+    /**
+     * Check if user can edit
+     *
+     * @param int $userLevel
+     * @return bool
+     */
+    public function userCanEdit($userLevel = NULL)
     {
-        if (is_null($userId)) {
-            $userId = $this->user->user_level;
+        if (is_null($userLevel)) {
+            $userLevel = $this->user->user_level;
         }
-        return ($userId >= model_User::LEVEL_ADMIN);
+        return ($userLevel >= model_User::LEVEL_ADMIN);
     }
 
     /**
@@ -147,7 +157,7 @@ class model_Page extends model_Abstract
         $rootId = (0 == $level) ? ' id="cssmenu"' : '';
         $output = "<{$elemContainer}{$rootId}>";
         foreach ($items as $itemId => $_item) {
-            if ($_item['item']->userCanView($this->user->id)) {
+            if ($_item['item']->userCanView($this->user->user_level)) {
                 $output .= "<{$elemNode}>";
                 if (isset($_item['item'])) {
                     $active = ($itemId = $this->id) ? ' class="active"' : '';
