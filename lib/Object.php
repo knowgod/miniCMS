@@ -28,6 +28,7 @@ class lib_Object
         foreach ($data as $key => $val) {
             $this->_data[$key] = $val;
         }
+        return $this;
     }
 
     /**
@@ -42,6 +43,7 @@ class lib_Object
         } else {
             $this->_data[$data] = $value;
         }
+        return $this;
     }
 
     public function getData($key = NULL)
