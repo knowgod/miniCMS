@@ -1,9 +1,15 @@
 <?php
 
+/**
+ * Shorter alias
+ */
 define('DS', DIRECTORY_SEPARATOR);
 
 /**
  * The main application class
+ *
+ * It starts the application with static method run().
+ * Desired controller is selected based on the request parameters.
  *
  * @author arkadij
  */
@@ -35,6 +41,12 @@ class app
         return 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
     }
 
+    /**
+     * Take the whole config or just a section of it
+     *
+     * @param string $section
+     * @return array
+     */
     public static function getConfig($section = '')
     {
         if (!self::$_config) {
@@ -72,6 +84,7 @@ class app
     }
 
     /**
+     * Use it to log info into file
      *
      * @param mixed $data
      * @param string $file
@@ -111,6 +124,12 @@ class app
         return FALSE;
     }
 
+    /**
+     * Construct URL with parameters
+     *
+     * @param array $params
+     * @return type
+     */
     public static function getUrl(array $params = array())
     {
         $string = array();
@@ -120,6 +139,9 @@ class app
         return self::getBaseUrl() . '?' . implode('&', $string);
     }
 
+    /**
+     * The main entry point
+     */
     public static function run()
     {
         foreach (self::_getControllerSequence() as $name) {
