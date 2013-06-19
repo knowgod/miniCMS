@@ -16,3 +16,6 @@ Fill DB access details in the file </etc/config.php> (corresponding section shou
 
 Open the host homepage in browser. In 1st run it will install automatially with sample data.
 (For security reasons remove predefined users from DB table).
+Predefined users are (name / password): 
+user / user
+admin / admin
